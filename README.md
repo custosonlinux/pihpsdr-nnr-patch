@@ -1,9 +1,19 @@
 # piHPSDR NNR Patch
 
-Dieser Patch portiert **NNR (Neural Noise Reduction)** aus WDSP 2.10
-(implementiert im Schwesterprojekt [deskhpsdr](https://github.com/dl1bz/deskhpsdr),
-siehe [Diskussion #207](https://github.com/dl1bz/deskhpsdr/discussions/207))
-nach [piHPSDR](https://github.com/dl1ycf/pihpsdr), das noch auf WDSP 2.00 basiert.
+Dieser Patch portiert **NNR (Neural Noise Reduction)** aus WDSP 2.10 nach
+[piHPSDR](https://github.com/dl1ycf/pihpsdr), das noch auf WDSP 2.00 basiert.
+
+NNR wurde von Warren Pratt (NR0V) im offiziellen WDSP-Repository
+[TAPR/OpenHPSDR-wdsp](https://github.com/TAPR/OpenHPSDR-wdsp/tree/master/wdsp%202.10)
+eingeführt. Das Schwesterprojekt [deskhpsdr](https://github.com/dl1bz/deskhpsdr)
+war das erste HPSDR-Programm, das WDSP 2.10 integriert hat
+(siehe [Diskussion #207](https://github.com/dl1bz/deskhpsdr/discussions/207)),
+und diente hier als praktische Vorlage für die Einbindung. Die eigentlichen
+NNR-Quelldateien wurden gegen das offizielle TAPR-Repository verifiziert:
+die beiden eingebetteten Modell-Gewichte (`nnr_model_0.c`, `nnr_model_1.c`)
+sind byte-identisch mit dem TAPR-Original, und `nnr.c`/`nnet.c`/`nnio.c`
+unterscheiden sich nur in Formatierung (deskhpsdr hat den gesamten WDSP-Baum
+mit einem Codeformatter durchlaufen lassen), nicht in der Logik.
 
 NNR ist ein neues, netzwerkbasiertes Rauschunterdrückungsmodell und **nicht**
 dasselbe wie die vorhandenen NR2/NR3/NR4-Verfahren. Es wird in piHPSDR als
@@ -12,11 +22,10 @@ Modellen ("Standard" und "Premium") und einem einstellbaren Mask Floor.
 
 Es wurde **nicht** das komplette WDSP auf 2.10 angehoben (der Diff zwischen
 den beiden WDSP-Bäumen betrifft fast jede Datei, ist aber überwiegend reines
-Reformatting von deskhpsdr, keine funktionale Änderung). Stattdessen wurden
-nur die neuen, in sich abgeschlossenen NNR-Quelldateien (inkl. der beiden
-eingebetteten Modell-Gewichte) aus `deskhpsdr/wdsp-2.10` übernommen und nach
-dem bereits vorhandenen Muster von NR3 (`rnnr`) / NR4 (`sbnr`) in piHPSDR
-eingebunden.
+Reformatting, keine funktionale Änderung). Stattdessen wurden nur die neuen,
+in sich abgeschlossenen NNR-Quelldateien (inkl. der beiden eingebetteten
+Modell-Gewichte) übernommen und nach dem bereits vorhandenen Muster von
+NR3 (`rnnr`) / NR4 (`sbnr`) in piHPSDR eingebunden.
 
 **Hinweis zur Performance:** Laut dem deskhpsdr-Entwickler erhöht NNR die
 CPU-Last deutlich; es wurde dort nur auf einem Raspberry Pi 5 (bzw. potenteren
@@ -98,5 +107,7 @@ Menüpunkts in der GUI.
 ## Lizenz
 
 piHPSDR und WDSP stehen unter der GPL. Die NNR-Quelldateien und die darin
-enthaltenen Modellgewichte stammen unverändert aus deskhpsdrs WDSP-2.10-Fork
-und sind dort (C) 2026 Warren Pratt, NR0V, ebenfalls unter der GPL.
+enthaltenen Modellgewichte stammen inhaltlich unverändert aus dem offiziellen
+[TAPR/OpenHPSDR-wdsp](https://github.com/TAPR/OpenHPSDR-wdsp/tree/master/wdsp%202.10)-Repository
+(hier über deskhpsdrs reformatierte Kopie bezogen) und sind (C) 2026
+Warren Pratt, NR0V, ebenfalls unter der GPL.
